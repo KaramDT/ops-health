@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.mcp.json
+automation/site-health-seed-workflow.deployed.json
+node_modules/
+dist/
+.dt-app/
+*.log
+.DS_Store

@@ -1,0 +1,55 @@
+{
+  "name": "ops-health",
+  "version": "0.0.0",
+  "description": "A starting project with routing, fetching data, and charting",
+  "scripts": {
+    "build": "dt-app build",
+    "start": "dt-app dev",
+    "create:function": "dt-app function create",
+    "create:action": "dt-app action create",
+    "uninstall": "dt-app uninstall",
+    "deploy": "dt-app deploy",
+    "update": "dt-app update",
+    "info": "dt-app info",
+    "help": "dt-app help",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=16.13.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dynatrace-sdk/app-environment": "^1.1.4",
+    "@dynatrace-sdk/client-query": "^1.26.0",
+    "@dynatrace-sdk/error-handlers": "^1.3.1",
+    "@dynatrace-sdk/navigation": "^2.2.1",
+    "@dynatrace-sdk/react-hooks": "^1.14.1",
+    "@dynatrace-sdk/user-preferences": "^1.1.4",
+    "@dynatrace/strato-components": "^3.10.0",
+    "@dynatrace/strato-design-tokens": "^1.5.2",
+    "@dynatrace/strato-geo": "^3.13.2",
+    "@dynatrace/strato-icons": "^2.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-intl": "6.6.2",
+    "react-router-dom": "^6.22.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@microsoft/eslint-plugin-sdl": "^1.1.0",
+    "@types/node": "^24.13.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "dt-app": "1.15.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-n": "^17.24.0",
+    "eslint-plugin-no-secrets": "^2.3.3",
+    "eslint-plugin-no-unsanitized": "^4.1.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^6.1.1",
+    "eslint-plugin-security": "^3.0.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.64.0"
+  }
+}

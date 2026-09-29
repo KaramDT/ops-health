@@ -1,0 +1,38 @@
+{
+  "title": "Ops Health Data",
+  "description": "Hourly generator of synthetic site.health.check bizevents, correlated logs, and per-signal metrics for the Ops Health app. Task JS lives at automation/site-health-seed-task.js; edit + redeploy via scripts/deploy-workflow.ts.",
+  "type": "STANDARD",
+  "isPrivate": false,
+  "ownerType": "USER",
+  "schemaVersion": 4,
+  "triggerType": "Schedule",
+  "hourlyExecutionLimit": 1000,
+  "trigger": {
+    "schedule": {
+      "isActive": true,
+      "timezone": "America/Los_Angeles",
+      "inputs": {},
+      "filterParameters": {},
+      "rule": null,
+      "isFaulty": false,
+      "nextExecution": null,
+      "trigger": {
+        "type": "cron",
+        "cron": "0 * * * *"
+      }
+    }
+  },
+  "tasks": {
+    "seed_bizevents": {
+      "name": "seed_bizevents",
+      "description": "Generate 348 synthetic site.health.check bizevents and POST them to the platform bizevents ingest endpoint.",
+      "action": "dynatrace.automations:run-javascript",
+      "position": { "x": 0, "y": 1 },
+      "predecessors": [],
+      "conditions": { "states": {} },
+      "input": {
+        "script": "__TASK_SCRIPT__"
+      }
+    }
+  }
+}

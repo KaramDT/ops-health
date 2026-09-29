@@ -1,0 +1,19 @@
+{
+  "$schema": "./.dt-app/app.config.schema.json",
+  "environmentUrl": "https://<your-tenant>.apps.dynatrace.com/",
+  "app": {
+    "name": "Ops Health",
+    "version": "0.1.8",
+    "description": "Real-time health of stores, warehouses, offices, and datacenters",
+    "id": "my.ops.health",
+    "scopes": [
+      { "name": "storage:bizevents:read",       "comment": "read site.health.check bizevents (specific)" },
+      { "name": "storage:events:read",          "comment": "legacy events read for compatibility" },
+      { "name": "storage:buckets:read",         "comment": "Grail bucket enumeration required by DQL executor" },
+      { "name": "storage:logs:read",            "comment": "read correlated site health logs" },
+      { "name": "storage:metrics:read",         "comment": "read custom.ops_health.* metrics for per-signal charts" },
+      { "name": "state:user-app-states:read",   "comment": "read per-user app settings (customer name, tile visibility)" },
+      { "name": "state:user-app-states:write",  "comment": "persist per-user app settings from the Settings sheet" }
+    ]
+  }
+}

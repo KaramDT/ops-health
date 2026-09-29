@@ -1,0 +1,16 @@
+{
+  "name": "trader-joes-ops-health",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "seed": "tsx scripts/seed-site-health.ts",
+    "deploy:workflow": "tsx scripts/deploy-workflow.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

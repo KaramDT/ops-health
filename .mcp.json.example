@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "dt-app-mcp": {
+      "command": "npx",
+      "args": ["-y", "dt-app-mcp"]
+    },
+    "dynatrace-mcp": {
+      "type": "http",
+      "url": "https://<tenant>.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp",
+      "headers": {
+        "Authorization": "Bearer <platform-token-with-mcp-gateway-scopes>"
+      }
+    }
+  }
+}
