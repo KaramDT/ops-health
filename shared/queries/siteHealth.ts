@@ -15,7 +15,7 @@
 // If the workflow is paused, run `npm run seed` locally before demos.
 
 export const DEFAULT_LOOKBACK = "1h";
-export const DEFAULT_PROVIDER = "trader-joes.ops-health";
+export const DEFAULT_PROVIDER = "demo-retail.ops-health";
 export const BIZEVENT_TYPE = "site.health.check";
 
 interface QueryOpts {

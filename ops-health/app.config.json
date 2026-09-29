@@ -1,6 +1,6 @@
 {
   "$schema": "./.dt-app/app.config.schema.json",
-  "environmentUrl": "https://<your-tenant>.apps.dynatrace.com/",
+  "environmentUrl": "https://REPLACE-ME.apps.dynatrace.com/",
   "app": {
     "name": "Ops Health",
     "version": "0.1.8",

@@ -130,7 +130,7 @@ export interface SiteDetailRow {
 export function siteLogsQuery(siteType: SiteType, tf: TimeframeValue | null): string {
   return `
 ${fetchClause(tf).replace("fetch bizevents", "fetch logs")}
-| filter log.source == "trader-joes.ops-health" and \`site.type\` == "${siteType}"
+| filter log.source == "demo-retail.ops-health" and \`site.type\` == "${siteType}"
 | sort timestamp desc
 | fields timestamp, content, loglevel, \`site.id\`, category
 | limit 500

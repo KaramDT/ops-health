@@ -23,7 +23,7 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  customerName: "Trader Joe's",
+  customerName: "Demo Retail",
   tiles: Object.fromEntries(
     SITE_TYPES.map((t) => [t, { visible: true, label: SITE_TYPE_META[t].plural }]),
   ) as Record<SiteType, TileSetting>,

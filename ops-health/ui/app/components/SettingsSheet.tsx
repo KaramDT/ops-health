@@ -63,7 +63,7 @@ export const SettingsSheet = ({ show, onDismiss }: SettingsSheetProps) => {
           <FormField>
             <Label>Customer name</Label>
             <TextInput
-              placeholder="e.g. Trader Joe's"
+              placeholder="e.g. Demo Retail"
               value={draft.customerName}
               onChange={(v) => setDraft((d) => ({ ...d, customerName: v }))}
             />

@@ -29,10 +29,10 @@ The app queries these fields — the workflow MUST emit them exactly:
 
 | Field | Type | Example |
 |---|---|---|
-| `event.provider` | `"<PROVIDER>"` | `"trader-joes.ops-health"` — usually `<customer>.ops-health` |
+| `event.provider` | `"<PROVIDER>"` | `"demo-retail.ops-health"` — usually `<customer>.ops-health` |
 | `event.type` | `"site.health.check"` | fixed |
 | `site.id` | string, stable | `"store-0042"`, `"warehouse-01"` |
-| `site.name` | string | `"Trader Joe's - Pasadena, CA"` |
+| `site.name` | string | `"Demo Retail - Pasadena, CA"` |
 | `site.type` | enum | `"store"` \| `"warehouse"` \| `"office"` \| `"datacenter"` |
 | `site.region` | enum | `"West"` \| `"Midwest"` \| `"Northeast"` \| `"South"` |
 | `category` | enum, varies by `site.type` | see below |
@@ -178,7 +178,7 @@ dtctl get wfe <execution-id> -o json
 
 ## Post-deployment: point the app at the new data
 
-The Ops Health app's DQL queries filter on `event.provider == "trader-joes.ops-health"` by default (see `ops-health/ui/app/schema/siteHealth.ts`, `BIZEVENT_PROVIDER`). If the seeder uses a different provider slug (e.g. `acme.ops-health`), the SE needs to either:
+The Ops Health app's DQL queries filter on `event.provider == "demo-retail.ops-health"` by default (see `ops-health/ui/app/schema/siteHealth.ts`, `BIZEVENT_PROVIDER`). If the seeder uses a different provider slug (e.g. `acme.ops-health`), the SE needs to either:
 
 - Edit `BIZEVENT_PROVIDER` in the schema and rebuild the app, OR
 - Add a per-user "provider" setting to the app's Settings sheet (Phase 8 work, not yet built).

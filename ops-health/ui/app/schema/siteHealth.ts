@@ -25,17 +25,17 @@ export type AnyCategory =
   | (typeof CATEGORIES_BY_SITE_TYPE.store)[number]
   | (typeof CATEGORIES_BY_SITE_TYPE.warehouse)[number];
 
-export const BIZEVENT_PROVIDER = "trader-joes.ops-health";
+export const BIZEVENT_PROVIDER = "demo-retail.ops-health";
 export const BIZEVENT_TYPE = "site.health.check";
 
 // The customer prefix baked into ingested site.name values by the default seed/workflow.
 // Kept here so the display-name rewriter can strip it in favour of the current
 // customer name from settings, without re-ingesting any data.
-export const DEFAULT_CUSTOMER_PREFIX = "Trader Joe's";
+export const DEFAULT_CUSTOMER_PREFIX = "Demo Retail";
 
 // Rewrite a raw site.name to use the current customer prefix from settings.
 // Handles two shapes:
-//   "Trader Joe's - Pasadena, CA"   → "<customerName> - Pasadena, CA"
+//   "Demo Retail - Pasadena, CA"   → "<customerName> - Pasadena, CA"
 //   "Ontario Distribution Center"   → unchanged (never had the prefix)
 export function formatSiteName(rawName: string, customerName: string): string {
   if (!customerName || customerName === DEFAULT_CUSTOMER_PREFIX) return rawName;

@@ -13,7 +13,7 @@ Everything the SE needs is baked into this repo. Your job is to collect their te
 Ask the SE these two questions in a single message (use whatever UI you have for structured questions; if none, ask in prose):
 
 1. **What's your Dynatrace tenant URL?**
-   - Format: `https://<tenant>.apps.dynatrace.com` (or `https://<tenant>.dev.apps.dynatracelabs.com` for dev tenants).
+   - Format: `https://REPLACE-ME.apps.dynatrace.com` (or `https://<tenant>.dev.apps.dynatracelabs.com` for dev tenants).
    - This is what shows in your address bar when you're using the tenant.
 2. **Paste a platform token minted from your tenant** with these scopes:
    - `storage:events:write` (bizevents ingest)
@@ -39,10 +39,10 @@ Create `.env` (gitignored) with their answers from step 1:
 ```
 DT_ENV_URL=<their tenant URL, no trailing slash>
 DT_PLATFORM_TOKEN=<their token>
-DT_BIZEVENT_PROVIDER=trader-joes.ops-health
+DT_BIZEVENT_PROVIDER=demo-retail.ops-health
 ```
 
-Leave `DT_BIZEVENT_PROVIDER` as the default `trader-joes.ops-health` unless the SE wants a different slug — the app's DQL queries pin on this exact string (they can swap it later by editing `BIZEVENT_PROVIDER` in `ops-health/ui/app/schema/siteHealth.ts` and redeploying).
+Leave `DT_BIZEVENT_PROVIDER` as the default `demo-retail.ops-health` unless the SE wants a different slug — the app's DQL queries pin on this exact string (they can swap it later by editing `BIZEVENT_PROVIDER` in `ops-health/ui/app/schema/siteHealth.ts` and redeploying).
 
 ### Step 4 — Point the app at their tenant
 

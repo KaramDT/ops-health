@@ -110,8 +110,8 @@ function CategoryStatusCell({
 }
 
 function rebrand(content: string, customerName: string): string {
-  if (!customerName || customerName === "Trader Joe's") return content;
-  return content.replace(/Trader Joe's/g, customerName);
+  if (!customerName || customerName === "Demo Retail") return content;
+  return content.replace(/Demo Retail/g, customerName);
 }
 
 // One "metric" stat card inside the expanded-row insights panel.
@@ -480,7 +480,7 @@ export const CategoryDetail = ({ siteType }: CategoryDetailProps) => {
   const allRows = useMemo<TableRow[]>(() => {
     if (!data?.records) return [];
     const customer = settings.customerName;
-    // Rewrite the ingested "Trader Joe's - City, ST" prefix using the current customer
+    // Rewrite the ingested "Demo Retail - City, ST" prefix using the current customer
     // name from settings. Doing it here means every downstream consumer (table, map,
     // tooltip, focus pill) sees the branded name without threading customerName further.
     return (data.records as unknown as SiteDetailRow[]).map((raw) => {

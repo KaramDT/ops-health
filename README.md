@@ -1,73 +1,74 @@
 # Ops Health
 
-A Dynatrace app that shows the current health of every location a customer runs — stores, warehouses, offices, datacenters — in one dashboard. Backed entirely by synthetic bizevents and logs, so it's safe to demo without touching a customer's real data.
+A reusable Dynatrace app that shows the current health of every location a customer runs — stores, warehouses, offices, datacenters — in one dashboard. Backed by a synthetic ingest pipeline (bizevents + logs + metrics) so it demos safely without touching real data.
 
-Built as a reusable demo asset for SEs. Each teammate brands the app for the customer they're in front of via a Settings sheet in the top right.
+Built as an SE demo asset. Brand it per customer via the in-app Settings sheet — customer name, tile visibility, tile labels are all live-editable.
 
-## What's in here
+---
 
-| Path | Purpose |
-|---|---|
-| [ops-health/](./ops-health/) | The Dynatrace app itself — Strato + React + TypeScript. |
-| [scripts/seed-site-health.ts](./scripts/seed-site-health.ts) | Local runner that ingests one round of bizevents + logs. Use before a demo if you need fresh data now. |
-| [automation/](./automation/) | The Dynatrace AutomationEngine workflow that ingests hourly so the app is always populated. Reference implementation the seeder skill points at. |
-| [shared/schema/siteHealth.ts](./shared/schema/siteHealth.ts) | Schema constants (site types, categories, regions, statuses) shared by the seed script and the app. |
-| [.claude/skills/ops-health-seeder/SKILL.md](./.claude/skills/ops-health-seeder/SKILL.md) | Agent skill that guides a coding agent to generate a customer-specific ingest workflow. |
-| [.env](./.env) *(gitignored)* | Local env: `DT_ENV_URL`, `DT_PLATFORM_TOKEN`, `DT_BIZEVENT_PROVIDER`. See [.env.example](./.env.example). |
+## Install (via Claude Code)
 
-## First-time setup
-
-1. Install dtctl and log in against the target tenant:
-   ```bash
-   brew install dynatrace-oss/tap/dtctl
-   dtctl auth login --context <name> --environment "https://<tenant>.apps.dynatrace.com"
-   ```
-2. Install the skill packs used by the coding agent (optional but recommended):
-   ```bash
-   npx skills add dynatrace/dynatrace-for-ai
-   npx skills add dynatrace-oss/dtctl
-   ```
-3. Copy [.env.example](./.env.example) to `.env` and fill in a platform token with scopes `storage:events:write` and `logs.ingest`.
-4. Install dependencies (both the root seed tooling and the app):
-   ```bash
-   npm install
-   cd ops-health && npm install
-   ```
-
-## Running the app locally
+The whole deploy is agent-driven. Two commands, one question, done.
 
 ```bash
+git clone https://github.com/KaramDT/ops-health.git
 cd ops-health
-npm run start
 ```
 
-Then open the URL that `dt-app dev` prints — the tenant-hosted `local-dev-server` URL. Log into Dynatrace when prompted and accept the app scopes.
+Open the folder in **Claude Code** (or any Claude Agent SDK–powered coding agent) and say:
 
-## Feeding the app with data
+> **deploy this**
 
-Two options — pick whichever fits your demo:
+The agent reads [CLAUDE.md](./CLAUDE.md) and walks you through it. It will:
 
-### One-off refresh (local)
-```bash
-npm run seed
-```
-Ingests ~348 bizevents + ~416 logs, deterministic per (`DT_SEED`, site.id, category). Re-runnable — each run overwrites the "current state" the app queries.
+1. Ask for your **tenant URL** and a **platform token** (with a link to mint one with the right scopes).
+2. Install dependencies, write your `.env`, point the app at your tenant.
+3. Verify `dtctl` is installed (and install it via `brew` if not — waits for your one-time login).
+4. Run the seed to backfill data and deploy the hourly "Ops Health Data" workflow.
+5. Deploy the app to your tenant via `dt-app deploy` (pauses for the one OAuth prompt).
+6. Hand you the deployed-app URL. You click the gear icon and brand it for your customer.
 
-### Continuous (deployed workflow)
-```bash
-npm run deploy:workflow
-```
-Deploys an hourly workflow that keeps events flowing. Idempotent — subsequent runs update the same workflow in place. `dtctl exec workflow <id>` triggers it manually.
+**Total time:** ~5 min end-to-end, minus tenant SSO round-trips.
 
-## Standing up a new customer demo
+---
 
-1. Update the customer branding from inside the app: click the gear icon in the top right → set the customer name, toggle tiles on/off, rename tiles for the customer's vocabulary (e.g. "Stores" → "Restaurants" for a QSR customer). Settings are per-user.
-2. If the customer's inventory looks meaningfully different (different scale, different site names, different provider slug), have your coding agent invoke the [ops-health-seeder](./.claude/skills/ops-health-seeder/SKILL.md) skill: `/ops-health-seeder generate a workflow for <Customer>`. It'll walk you through inputs, generate the workflow JS, verify it locally, and deploy.
-3. Demo.
+## What you get
 
-## Architecture notes
+- **Overview page** — 4 status tiles (Stores / Warehouses / Offices / Datacenters), a hero-stat strip, and a "Sites needing attention" panel. All fed by real Grail queries against synthetic data.
+- **Detail pages** — per-site-type tables with region/status/name filtering, an interactive map (marker click → focus row), and expandable rows showing per-signal metrics charts + filtered logs.
+- **Settings sheet** — per-user, tenant-scoped. Change the customer name, hide tiles you don't demo, rename tiles for the customer's vocabulary (e.g. "Stores" → "Restaurants" for a QSR).
+- **Hourly workflow** — the "Ops Health Data" AutomationEngine workflow that keeps ~350 bizevents + ~1150 logs + ~9000 metric samples flowing every hour without you re-running anything.
 
-- **Timeframe** is app-wide, controlled from the header. It's injected directly into the DQL text (`fetch bizevents, from: now()-1h, to: now()`) rather than passed as a separate API param — DQL accepts relative expressions natively; the API's `defaultTimeframeStart`/`End` only accept ISO.
-- **Refresh** is via `refetchInterval: 60000` on each `useDql`. If the workflow ingests while the app is open, tiles update within a minute.
-- **Settings** live in per-user App State (`state:user-app-states:read` + `state:user-app-states:write`). Each teammate can brand the demo differently in the same tenant.
-- **Logs** are correlated to bizevents by matching `(site.id, category)`. Level (`INFO`/`WARN`/`ERROR`) maps from the site's rolled-up status. Content is generated from a template pool that mirrors the reasons pool used for `status.detail`, so the log stream reads like the same incident.
+---
+
+## Manual install (if you don't have Claude Code)
+
+1. **Deps:** `npm install && cd ops-health && npm install && cd ..`
+2. **Env:** `cp .env.example .env` and fill in `DT_ENV_URL` + `DT_PLATFORM_TOKEN` (needs `storage:events:write`, `logs.ingest`, `metrics.ingest`).
+3. **Tenant:** edit `ops-health/app.config.json` — replace `environmentUrl` with your tenant URL.
+4. **dtctl:** `brew install dynatrace-oss/tap/dtctl && dtctl auth login --context ops-health --environment "<your tenant URL>"`
+5. **Data + workflow:** `npm run seed && npm run deploy:workflow`
+6. **App:** `cd ops-health && npx dt-app deploy --optimize --no-open` — complete the OAuth flow when it prints an auth URL. When it prints `Open your deployed app: '<url>'`, open that URL.
+7. **Brand it:** open the app → gear icon → set customer name.
+
+---
+
+## Repo layout
+
+| Path | What lives here |
+|---|---|
+| [ops-health/](./ops-health) | The Dynatrace app — Strato + React + TypeScript, built with `dt-app`. |
+| [scripts/seed-site-health.ts](./scripts/seed-site-health.ts) | Local one-shot data seeder. `npm run seed`. |
+| [scripts/deploy-workflow.ts](./scripts/deploy-workflow.ts) | Assembles + deploys the workflow via `dtctl`. `npm run deploy:workflow`. |
+| [automation/](./automation) | Workflow envelope (JSON) + JavaScript task that emits bizevents/logs/metrics. |
+| [shared/schema/siteHealth.ts](./shared/schema/siteHealth.ts) | Schema constants (site types, categories, regions, statuses) shared between seed and workflow. |
+| [.claude/skills/ops-health-seeder/SKILL.md](./.claude/skills/ops-health-seeder/SKILL.md) | Agent skill — walks a coding agent through generating a customer-specific ingest workflow. |
+| [.env.example](./.env.example) | Env template. Real `.env` is gitignored. |
+| [.mcp.json.example](./.mcp.json.example) | MCP config template if you're using Claude Code with the Dynatrace MCP server. |
+| [CLAUDE.md](./CLAUDE.md) | Agent-facing deploy playbook. |
+
+---
+
+## Customizing beyond the Settings UI
+
+If a customer's site inventory is meaningfully different (different site types, different categories, different scale), invoke the [ops-health-seeder](./.claude/skills/ops-health-seeder/SKILL.md) skill in your agent. It walks through generating a customer-specific ingest workflow — new site names, new categories, new schema — that plugs into the same app.
